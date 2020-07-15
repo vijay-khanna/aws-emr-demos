@@ -15,9 +15,4 @@ sudo su hdfs
  # create new folder
 hadoop fs -mkdir -p /user/newuser
 
-
-
-
-
 ```
-
