@@ -22,6 +22,7 @@ wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EM
 wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/file1.txt
 wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/file2.txt
 wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/file3.txt
+wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/WordCount.java
 
 javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop-mapreduce/* emrWordCount.java -d build -Xlint 
 
@@ -38,7 +39,7 @@ hadoop fs -ls /temp-wc-jobs/0010_Wordcount
 
 #  Run the WordCount application from the JAR file, passing the paths to the input and output directories in HDFS.
 
-hadoop fs -put file*.txt /temp-wc-jobs/0010_Wordcount
+hadoop fs -put file*.txt /temp-wc-jobs/0010_Wordcount ; hadoop fs -cat /temp-wc-jobs/0010_Wordcount/file*
 
 hadoop jar emrWordCount.jar emrWordCount /temp-wc-jobs/0010_Wordcount/input /temp-wc-jobs/0010_Wordcount/output
 
