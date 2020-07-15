@@ -7,61 +7,39 @@ Create EMR cluster using GUI, note the Master public DNS
 ```
 # ssh to "Master public DNS".
 
-# to List all users on hadoop
-hadoop fs -ls /user
 
-
-# input a username
-
-read -p "Enter a unique User Name : " USER_NAME ; 
-echo -e "\n * * \e[106m ...User Name to be used is... : "$USER_NAME"\e[0m \n"
-
-
-echo "export USER_NAME=${USER_NAME}" >> ~/.bash_profile
-cat ~/.bash_profile
-export USER_NAME=${USER_NAME}
-echo "export USER_NAME=${USER_NAME}" > /tmp/temp_profile_variable
 
 # login as hdfs
-sudo su hdfs
-source /tmp/temp_profile_variable ; echo $USER_NAME
-
-# create new folder
-hadoop fs -mkdir -p /user/${USER_NAME}
-
-hadoop fs -ls /user
+sudo su - hdfs
 
 
-## modify permissions to folder
-
-hadoop fs -chmod 777 /user/${USER_NAME}
-hadoop fs -chown ${USER_NAME} /user/${USER_NAME}
-
-## make a folder for wordcount
-
-hadoop fs -mkdir -p /user/${USER_NAME}/0010_Wordcount
-hadoop fs -mkdir -p /user/${USER_NAME}/0010_Wordcount/input
-
-hadoop fs -ls /user/${USER_NAME}/0010_Wordcount
-
-
-exit
-cd ; mkdir temp; cd temp ; mkdir 0010wc ; pwd
+cd ; cd  /tmp ; mkdir tempwc; cd tempwc ; mkdir 0010wc ; cd 0010wc ; pwd ; mkdir -p build
 
 ## pwd : should show as /home/ec2-user/temp/0010wc
 
-## transfer the java file and sample files to /home/ec2-user/temp/0010wc folder using scp. 
-OR
-## wget from << github>>
+## wget files from << github>>
+wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/emrWordCount.java
+wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/file1.txt
+wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/file2.txt
+wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/file3.txt
 
-mkdir -p build
+
 jar -cvf emrWordCount.jar -C build/ . 
+
+
+# create new folder
+hadoop fs -mkdir -p /temp-wc-jobs
+
+hadoop fs -mkdir -p /temp-wc-jobs/0010_Wordcount ; hadoop fs -mkdir -p /temp-wc-jobs/0010_Wordcount/input 
+
+hadoop fs -ls /temp-wc-jobs/0010_Wordcount
+
 
 #  Run the WordCount application from the JAR file, passing the paths to the input and output directories in HDFS.
 
-hadoop fs -put file* /user/${USER_NAME}/0010_Wordcount/input
+hadoop fs -put file*.txt /temp-wc-jobs/0010_Wordcount
 
-hadoop jar emrWordCount.jar emrWordCount /user/${USER_NAME}/0010_Wordcount/input /user/${USER_NAME}/0010_Wordcount/output
+hadoop jar emrWordCount.jar emrWordCount /temp-wc-jobs/0010_Wordcount/input /temp-wc-jobs/0010_Wordcount/output
 
 
 
