@@ -23,6 +23,7 @@ wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EM
 wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/file2.txt
 wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0010-EMR-Getting-Started/file3.txt
 
+javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop-mapreduce/* emrWordCount.java -d build -Xlint 
 
 jar -cvf emrWordCount.jar -C build/ . 
 
