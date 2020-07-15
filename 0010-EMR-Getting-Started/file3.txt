@@ -1,0 +1,1 @@
+After counting the unique words the reduced will output a summary.
