@@ -37,11 +37,30 @@ Arguments #1 = Input Folder on S3
 Arguments #2 = Output Folder on S3
 
 
+```
+
+
+Works fine from command prompt as well
+```
+sudo su - hdfs
+hadoop fs -mkdir /user/ec2-user
+
+hadoop fs -chmod 777 /user/ec2-user
+hadoop fs -chmown ec2-user user/ec2-user
+exit
+
+# copy text-content files to hadoop input folder. Use SCP or Wget. 
+wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0011-wordCount-works-on-Eclipse/file1.txt
+wget https://raw.githubusercontent.com/vijay-khanna/aws-emr-demos/master/0011-wordCount-works-on-Eclipse/file2.txt
 
 
 
+ hadoop fs -mkdir /user/ec2-user/wordcount/
+ hadoop fs -mkdir /user/ec2-user/wordcount/input
 
 
+hadoop fs -put file* /user/ec2-user/wordcount/input
+hadoop fs -cat /user/ec2-user/wordcount/output2/*
 
 ```
 
