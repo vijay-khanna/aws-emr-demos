@@ -1,0 +1,1 @@
+A Mapper and reduced can map and reduce to count and give a summary of the words in the files

@@ -1,0 +1,3 @@
+Hello World this is the first map reduce problem
+Testing the count of words and a summary of word count
+the word count program will use map reduce to map and then reduce the answers
