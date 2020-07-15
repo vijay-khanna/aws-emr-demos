@@ -3,6 +3,7 @@
 </br>
 * ** Getting Started**
 Create EMR cluster using GUI, note the Master public DNS
+
 ```
 # ssh to "Master public DNS".
 
@@ -14,5 +15,4 @@ sudo su hdfs
  
  # create new folder
 hadoop fs -mkdir -p /user/newuser
-
 ```
