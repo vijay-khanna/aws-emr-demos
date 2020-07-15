@@ -42,8 +42,8 @@ hadoop fs -put file*.txt /temp-wc-jobs/0010_Wordcount
 
 hadoop jar emrWordCount.jar emrWordCount /temp-wc-jobs/0010_Wordcount/input /temp-wc-jobs/0010_Wordcount/output
 
-
-
+hadoop fs -ls /temp-wc-jobs/0010_Wordcount/output
+hadoop fs -cat /temp-wc-jobs/0010_Wordcount/output/*
 
 
 
