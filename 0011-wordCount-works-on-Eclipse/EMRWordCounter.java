@@ -90,38 +90,58 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 public class EMRWordCounter {
-
+// Main class could have additional below options 
+	// Tools is interface that allows to specify command line options using -D . like setting number of reducers 
+	// Not mandatory to use Tools and configured , but makes the code more cleaner 
+	// extends Configured implements Tool 
+	// configured class has two main methods
+		// getConf() returns the configuration used by this object. 
+		// setConf()
 	
 	
 	
-	// Object = Key, Text = Value, Text = Output of Map Process, IntWritable = Always 1 <in this case> 1 for each unique word
+	// Object = Input Key, Text = input Value, Text = Output of Map Process, IntWritable = Output Value = 1 Always <in this case> 1 . for each word
 	public static class TokenizeMaper extends Mapper<Object, Text, Text, IntWritable>{
 		// we are getting a line of text at a time as input
 		
 		public void map(Object input_key_for_mapper, Text input_value_for_mapper, Context context_spit_out_keyValue_pairs) throws IOException, InterruptedException {
 			//context is the way in which the key-value pairs is spit out. 
-						
-			StringTokenizer string_Tokenizer = new StringTokenizer(input_value_for_mapper.toString());
-			
-			
-			Text key_wordOut = new Text();
+				
 			IntWritable value_equals_one = new IntWritable(1);
 			
+		StringTokenizer string_Tokenizer = new StringTokenizer(input_value_for_mapper.toString());
+	
+			
+			/*// Either This section or the next.. both works.. 
+
+			String string_Tokenizer[] = input_value_for_mapper.toString().split("\\s+");
+			
+			for(String string_Tokenizer_eachWord : string_Tokenizer) {
+				context_spit_out_keyValue_pairs.write(new Text(string_Tokenizer_eachWord.replaceAll("[^a-zA-Z]","").toLowerCase()), value_equals_one);
+				}
+			
+			*/
+			
+		Text key_wordOut = new Text();	
 			while(string_Tokenizer.hasMoreTokens()){
-				key_wordOut.set(string_Tokenizer.nextToken());
+//				key_wordOut.set(string_Tokenizer.nextToken());
+//				key_wordOut.set(string_Tokenizer.nextToken().toLowerCase());
+				key_wordOut.set(string_Tokenizer.nextToken().toLowerCase().replaceAll("[^a-zA-Z]",""));
+				// removes all non alphabets, and any special characters 
+				
 				context_spit_out_keyValue_pairs.write(key_wordOut,value_equals_one);
 				
+								
 			}
-			
+
 			
 		}
 		
 	}
 	
 	// Input of Reducer needs to be same as Output of Mapper. 
-	
-	
 	public static class SumReducer extends Reducer<Text,IntWritable, Text, IntWritable>{
+		// System automatically shuffle-sorts, and gives a iterable list as value to this reducer function.
 		
 		public void reduce(Text term, Iterable<IntWritable> list_of_ones, Context context_Write_Aggregate_Output) throws IOException, InterruptedException{
 			
@@ -159,21 +179,28 @@ public class EMRWordCounter {
 		 }
 		
 		 Job hadoop_job = Job.getInstance(conf, "Word Count");
-		 hadoop_job.setJarByClass(EMRWordCounter.class);
+		 // new job object. Configuration contains information about resources. 
+		 // core-site.xml, core-default.xml store default resources.
+		 // read only and site specific config of hadoop 
+		 
+		 
+		 hadoop_job.setJarByClass(EMRWordCounter.class);//Identify main driver class. Jar should be on HDFS so that all nodes can find this file.
 		
 		 hadoop_job.setMapperClass(TokenizeMaper.class);;
 		
 		 hadoop_job.setReducerClass(SumReducer.class);
 		 hadoop_job.setNumReduceTasks(2); // Can increase Reducers with this parameter. 
 		 hadoop_job.setOutputKeyClass(Text.class);
+		 // we can override MapOutputValueKeyClass if required. 
+		 
 		 hadoop_job.setOutputValueClass(IntWritable.class);
 	//	System.setProperty("hadoop.home.dir","D:\\Softwares\\hadoop\\bin" );
 		
 		
-		FileInputFormat.addInputPath(hadoop_job,new Path(otherArgs[0]));
+		FileInputFormat.addInputPath(hadoop_job,new Path(otherArgs[0])); // This can be specified via command line also 
 		FileOutputFormat.setOutputPath(hadoop_job,new Path(otherArgs[1]));
 		
-		boolean isSuccess_JobStatus = hadoop_job.waitForCompletion(true);
+		boolean isSuccess_JobStatus = hadoop_job.waitForCompletion(true); // submits the job 
 		
 		if(isSuccess_JobStatus) {
 			System.exit(0); // Exit with Success code	
