@@ -1,5 +1,5 @@
-# This One works fine on Eclipse Client. Getting Started First Steps.
-# Works fine on AWS EMR Cluster emr-5.30.1 as well 
+# This One works fine on Eclipse Client and the EMR Cluster . Getting Started First Steps.
+# Works fine on AWS EMR Cluster emr-5.30.1 
 
 > Feel free to leave comments and suggestions
 </br>
