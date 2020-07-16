@@ -14,6 +14,9 @@ package MapReduce.Example0013MapReduceBasics;
  * 
  * ....When Exporting the jar, Export project as "Runnable Jar", Launch Configuration, Export Destination, Library Handling = "Extract required libraries into generated Jar"
  * 
+ * in Run Configuration, Check the run Configurations => Main => Main Class. choose the main driver class. 
+ * 
+ * 
  * Update Maven project after making the changes . you will see JavaSE 1.8 in JRE System Library. 
  * 
  * POM.XML 
@@ -142,6 +145,7 @@ public class EMRWordCounter {
 	// Input of Reducer needs to be same as Output of Mapper. 
 	public static class SumReducer extends Reducer<Text,IntWritable, Text, IntWritable>{
 		// System automatically shuffle-sorts, and gives a iterable list as value to this reducer function.
+		// e.g. ("hello",1,1,1,1)			hello is key, and 1,1,1,1 is iterable list
 		
 		public void reduce(Text term, Iterable<IntWritable> list_of_ones, Context context_Write_Aggregate_Output) throws IOException, InterruptedException{
 			
