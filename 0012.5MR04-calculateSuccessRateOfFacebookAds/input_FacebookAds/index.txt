@@ -1,0 +1,9 @@
+AD ID 			:		FKLY490998LB,
+
+Time Stamp		:		2010-01-29 06:12:17,
+LocationwhereDisplayed	:		Mumbai,
+AdCategory		:		Ecommerce,
+NumberofClicks		:		39,
+NumberofConversions	:		13,
+AgeGroup		:		25-35
+
